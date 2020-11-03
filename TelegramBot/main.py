@@ -1,15 +1,28 @@
-import asyncio
-from aiogram import Bot, Dispatcher, executor
+# Telegram bot v1.0
+#   01.11.2020
+#
+#
+#
+#
+#
+#
+#
+#
+###########################
 
-from data.config import BOT_TOKEN
+from loader import bot, storage
 
-loop = asyncio.get_event_loop()
-bot = Bot(BOT_TOKEN, parse_mode='HTML')
-dp = Dispatcher(bot, loop=loop)
+
+async def on_shutdown(dp):
+    await bot.close()
+    await storage.close()
+
 
 if __name__ == '__main__':
-    from handlers.handlers import dp, send_to_admin
+    from handlers.users.handlers import send_to_admin
+    from aiogram import executor
+    from handlers import dp
 
-    executor.start_polling(dp, on_startup=send_to_admin)
+    executor.start_polling(dp, on_shutdown=on_shutdown, on_startup=send_to_admin)
 
 
