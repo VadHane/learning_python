@@ -1,13 +1,10 @@
 from time import sleep
-
-sum_column = sum_diagonal_line_one = sum_diagonal_line_two = 0
-
-all_element_magic_array = []
+all_element_magic_array = new_array = []
 magic_array = result_ = []
 new_element = [0, 0, 0]
 index = 1
 # Генерація усіх простих чисел до 1996
-list_just_number = [i for i in range(2, 1997)]
+list_just_number = [i for i in range(2, 500)]
 
 for number in list_just_number:
     while index < len(list_just_number):
@@ -28,8 +25,8 @@ while index < len(list_just_number) - 1:
     else:
         list_just_number.pop(index)
         index -= 1
-
     index += 1
+
 
 # 3-вибірка із 200 (усі можливі пари елементів матриці)
 for one in range(len(all_element_magic_array)):
@@ -43,46 +40,40 @@ for one in range(len(all_element_magic_array)):
                 ]
                 magic_array.append(new_element)
 
-
+print("Step one")
 for array in magic_array:
-    all_element_magic_array = []
     index = 0
     flag = False
 
     while index < len(magic_array):
         if sum(array) == sum(magic_array[index]) and array != magic_array[index]:
-            all_element_magic_array.append(magic_array[index])
-            magic_array.pop(index)
-            flag = True
-            index -= 1
+            if (array[0] not in magic_array[index] and array[1] not in magic_array[index] and
+                    array[2] not in magic_array[index]):
+                new_array.append(magic_array[index])
+                magic_array.pop(index)
+                flag = True
+                index -= 1
         index += 1
     if flag:
-        all_element_magic_array.append(array)
+        new_array.append(array)
+        all_element_magic_array.append(new_array)
+        new_array = []
 
-    index = 0
-    for one in range(len(all_element_magic_array)):
-        for two in range(len(all_element_magic_array)):
-            for three in range(len(all_element_magic_array)):
+
+print("Step two")
+
+for index in range(len(all_element_magic_array)):
+    for one in range(len(all_element_magic_array[index])):
+        for two in range(len(all_element_magic_array[index])):
+            for three in range(len(all_element_magic_array[index])):
                 if one == two or one == three or two == three:
                     continue
-                result_ = [all_element_magic_array[one], all_element_magic_array[two], all_element_magic_array[three]]
-
+                result_ = [
+                    all_element_magic_array[index][one],
+                    all_element_magic_array[index][two],
+                    all_element_magic_array[index][three]
+                ]
                 flag = False
-                for array_1 in all_element_magic_array:
-                    for element in array_1:
-                        while index < len(all_element_magic_array):
-                            if element in all_element_magic_array[index] and all_element_magic_array[index] != array_1:
-                                flag = True
-                                break
-                            index += 1
-                        if flag:
-                            break
-                        index = 0
-                    if flag:
-                        break
-                if flag:
-                    continue
-
                 sum_diagonal_line_one = sum_diagonal_line_two = const_sum_column = 0
                 for i in range(len(result_)):
                     sum_column = 0
@@ -101,5 +92,7 @@ for array in magic_array:
                         continue
 
                     print(
-                        all_element_magic_array[one], all_element_magic_array[two], all_element_magic_array[three]
+                        all_element_magic_array[index][one],
+                        all_element_magic_array[index][two],
+                        all_element_magic_array[index][three]
                     )

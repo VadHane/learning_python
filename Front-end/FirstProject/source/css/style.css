@@ -1,0 +1,23 @@
+body {
+    background-color: oldlace;
+}
+
+.back-header{
+        background-color: black;
+
+}
+
+.header {
+    height: 570px;
+}
+
+.header .hat-header .text-logo {
+    color: white;
+    font-size: 41px;
+
+}
+
+.header .hat-header .text-logo img {
+    width: 90px;
+    height: 90px;
+}
