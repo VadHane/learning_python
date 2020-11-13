@@ -1,10 +1,11 @@
 from time import sleep
-all_element_magic_array = new_array = []
-magic_array = result_ = []
+all_element_magic_array = list()
+magic_array = result_ = list()
 new_element = [0, 0, 0]
 index = 1
 # Генерація усіх простих чисел до 1996
-list_just_number = [i for i in range(2, 500)]
+list_just_number = [i for i in range(2, 19)]
+
 
 for number in list_just_number:
     while index < len(list_just_number):
@@ -40,6 +41,20 @@ for one in range(len(all_element_magic_array)):
                 ]
                 magic_array.append(new_element)
 
+magic_array = [
+    [3, 5, 2],
+    [4, 3, 6],
+    [8, 6, 4],
+    [2, 7, 6],
+    [4, 3, 8],
+    [3, 2, 1],
+    [2, 7, 6],
+    [9, 5, 1],
+    [4, 9, 2]
+]
+new_array = []
+all_new_array = []
+
 print("Step one")
 for array in magic_array:
     index = 0
@@ -47,52 +62,51 @@ for array in magic_array:
 
     while index < len(magic_array):
         if sum(array) == sum(magic_array[index]) and array != magic_array[index]:
-            if (array[0] not in magic_array[index] and array[1] not in magic_array[index] and
-                    array[2] not in magic_array[index]):
-                new_array.append(magic_array[index])
-                magic_array.pop(index)
-                flag = True
-                index -= 1
+            new_array.append(magic_array[index])
+            magic_array.pop(index)
+            flag = True
+            index -= 1
         index += 1
     if flag:
         new_array.append(array)
-        all_element_magic_array.append(new_array)
+        all_new_array.append(new_array)
         new_array = []
-
 
 print("Step two")
 
-for index in range(len(all_element_magic_array)):
-    for one in range(len(all_element_magic_array[index])):
-        for two in range(len(all_element_magic_array[index])):
-            for three in range(len(all_element_magic_array[index])):
+for all_array in all_new_array:
+    for one in range(len(all_array)):
+        for two in range(len(all_array)):
+            for three in range(len(all_array)):
                 if one == two or one == three or two == three:
                     continue
-                result_ = [
-                    all_element_magic_array[index][one],
-                    all_element_magic_array[index][two],
-                    all_element_magic_array[index][three]
-                ]
-                flag = False
-                sum_diagonal_line_one = sum_diagonal_line_two = const_sum_column = 0
-                for i in range(len(result_)):
+
+                if (all_array[one][0] in all_array[two] or all_array[one][0] in all_array[three] or
+                        all_array[one][1] in all_array[two] or all_array[one][1] in all_array[three] or
+                        all_array[one][2] in all_array[two] or all_array[one][2] in all_array[three]):
+                    continue
+
+                if (all_array[two][0] in all_array[three] or all_array[two][1] in all_array[three] or
+                        all_array[two][2] in all_array[three]):
+                    continue
+
+                magic_array = [all_array[one], all_array[two], all_array[three]]
+
+                sum_diagonal_line_one = sum_diagonal_line_two = const_sum = 0
+                for column in range(len(magic_array)):
                     sum_column = 0
-                    for k in range(len(result_)):
-                        sum_column += result_[k][i]
+                    for line in range(len(magic_array)):
+                        sum_column += magic_array[line][column]
 
-                    if i == 0:
-                        const_sum_column = sum_column
+                    if column == 0:
+                        const_sum = sum_column
 
-                    if sum_column != const_sum_column:
+                    if sum_column != const_sum:
                         break
 
-                    sum_diagonal_line_one += result_[i][i]
-                    sum_diagonal_line_two += result_[i][2 - i]
-                    if sum_diagonal_line_one != const_sum_column or sum_diagonal_line_two != const_sum_column:
+                    sum_diagonal_line_one += magic_array[column][column]
+                    sum_diagonal_line_two += magic_array[column][2 - column]
+                    if sum_diagonal_line_one != const_sum or sum_diagonal_line_two != const_sum:
                         continue
 
-                    print(
-                        all_element_magic_array[index][one],
-                        all_element_magic_array[index][two],
-                        all_element_magic_array[index][three]
-                    )
+                    print(magic_array)

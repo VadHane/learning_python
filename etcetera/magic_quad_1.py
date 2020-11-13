@@ -43,63 +43,61 @@ for one in range(len(all_element_magic_array)):
                 ]
                 magic_array.append(new_element)
 
+new_array = []
+all_new_array = []
 
+print("Step one")
 for array in magic_array:
-    all_element_magic_array = []
     index = 0
     flag = False
 
     while index < len(magic_array):
         if sum(array) == sum(magic_array[index]) and array != magic_array[index]:
-            all_element_magic_array.append(magic_array[index])
+            new_array.append(magic_array[index])
             magic_array.pop(index)
             flag = True
             index -= 1
         index += 1
     if flag:
-        all_element_magic_array.append(array)
+        new_array.append(array)
+        all_new_array.append(new_array)
+        new_array = []
 
-    index = 0
-    for one in range(len(all_element_magic_array)):
-        for two in range(len(all_element_magic_array)):
-            for three in range(len(all_element_magic_array)):
+print("Step two")
+
+for all_array in all_new_array:
+    for one in range(len(all_array)):
+        for two in range(len(all_array)):
+            for three in range(len(all_array)):
                 if one == two or one == three or two == three:
                     continue
-                result_ = [all_element_magic_array[one], all_element_magic_array[two], all_element_magic_array[three]]
 
-                flag = False
-                for array_1 in all_element_magic_array:
-                    for element in array_1:
-                        while index < len(all_element_magic_array):
-                            if element in all_element_magic_array[index] and all_element_magic_array[index] != array_1:
-                                flag = True
-                                break
-                            index += 1
-                        if flag:
-                            break
-                        index = 0
-                    if flag:
-                        break
-                if flag:
+                if (all_array[one][0] in all_array[two] or all_array[one][0] in all_array[three] or
+                        all_array[one][1] in all_array[two] or all_array[one][1] in all_array[three] or
+                        all_array[one][2] in all_array[two] or all_array[one][2] in all_array[three]):
                     continue
 
-                sum_diagonal_line_one = sum_diagonal_line_two = const_sum_column = 0
-                for i in range(len(result_)):
+                if (all_array[two][0] in all_array[three] or all_array[two][1] in all_array[three] or
+                        all_array[two][2] in all_array[three]):
+                    continue
+
+                magic_array = [all_array[one], all_array[two], all_array[three]]
+
+                sum_diagonal_line_one = sum_diagonal_line_two = const_sum = 0
+                for column in range(len(magic_array)):
                     sum_column = 0
-                    for k in range(len(result_)):
-                        sum_column += result_[k][i]
+                    for line in range(len(magic_array)):
+                        sum_column += magic_array[line][column]
 
-                    if i == 0:
-                        const_sum_column = sum_column
+                    if column == 0:
+                        const_sum = sum_column
 
-                    if sum_column != const_sum_column:
+                    if sum_column != const_sum:
                         break
 
-                    sum_diagonal_line_one += result_[i][i]
-                    sum_diagonal_line_two += result_[i][2 - i]
-                    if sum_diagonal_line_one != const_sum_column or sum_diagonal_line_two != const_sum_column:
+                    sum_diagonal_line_one += magic_array[column][column]
+                    sum_diagonal_line_two += magic_array[column][2 - column]
+                    if sum_diagonal_line_one != const_sum or sum_diagonal_line_two != const_sum:
                         continue
 
-                    print(
-                        all_element_magic_array[one], all_element_magic_array[two], all_element_magic_array[three]
-                    )
+                    print(magic_array)
