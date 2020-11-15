@@ -6,6 +6,13 @@ index = 1
 # Генерація усіх простих чисел до 1996
 list_just_number = [i for i in range(2, 19)]
 
+d = {
+    "d": 1,
+    "a": 2,
+    "v": 3
+}
+
+d = d.items()
 
 for number in list_just_number:
     while index < len(list_just_number):

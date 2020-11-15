@@ -4,15 +4,20 @@ from aiogram.dispatcher.filters import Command
 from random import randrange
 from loader import dp, bot
 from states.register_users import register_new_user
-from data.config import ADMINS_ID
+from data.config import USER_ID, ADMINS_ID
+from database import insert
+from keyboards.standart import key_help, start
 
 
 @dp.message_handler(Command('reg'), state=None)
 async def begin_register(message: types.Message):
-    await message.answer("Ви розпочали реєстрацію як студент 102 групи. \n"
-                         "Введіть ваше ім'я: ")
+    if message.from_user.id not in USER_ID:
+        await message.answer("Ви розпочали реєстрацію як студент 102 групи. \n"
+                             "Введіть ваше ім'я: ", reply_markup=types.ReplyKeyboardRemove())
 
-    await register_new_user.name.set()
+        await register_new_user.name.set()
+    else:
+        await message.answer("Ви уже заєстрований студент!", reply_markup=types.ReplyKeyboardRemove())
 
 
 @dp.message_handler(state=register_new_user.name)
@@ -51,7 +56,14 @@ async def input_user_key(message: types.Message, state: FSMContext):
     if int(user_key) == int(answer_user):
         await message.answer('Реєстрація успішно пройдена!')
         # функція запису ід користувача в БД
+        insert('users', {
+            'id_user': user_id,
+            'name_user': user.get('user_name')
+        })
+        USER_ID.append(user_id)
+        await message.answer("Вітаю! Ви успішно зареєструвались! \n"
+                             "/help - Дізнайтесь, що я вмію :)", reply_markup=key_help)
     else:
-        await message.answer('Ключ не співпадає! \n\n [Помилка №1]')
+        await message.answer('Ключ не співпадає! \n /reg - Спробуйте ще раз \n\n [Помилка №1]', reply_markup=start)
 
     await state.finish()
